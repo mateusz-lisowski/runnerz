@@ -1,10 +1,7 @@
 package com.github.mateuszlisowski.springtutorialrunnerz.run;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -32,6 +29,25 @@ public class RunController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Run with id " + id + " does not exist");
         }
         return run.get();
+    }
+
+    @PostMapping("")
+    Run createRun(@RequestBody Run run) {
+        return repository.createRun(run);
+    }
+
+    @PutMapping("/{id}")
+    Run updateRun(@RequestBody Run run, @PathVariable Integer id) {
+        return repository.updateRun(run, id);
+    }
+
+    @DeleteMapping("/{id}")
+    void deleteRun(@PathVariable Integer id) {
+        Optional<Run> runToDelete = repository.getRunByID(id);
+        if (runToDelete.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Run with id " + id + " does not exist");
+        }
+        repository.deleteRun(runToDelete.get());
     }
 
 }
