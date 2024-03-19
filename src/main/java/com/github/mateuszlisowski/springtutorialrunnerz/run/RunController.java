@@ -31,6 +31,7 @@ public class RunController {
         return run.get();
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("")
     Run createRun(@RequestBody Run run) {
         return repository.createRun(run);
@@ -38,9 +39,14 @@ public class RunController {
 
     @PutMapping("/{id}")
     Run updateRun(@RequestBody Run run, @PathVariable Integer id) {
-        return repository.updateRun(run, id);
+        Optional<Run> runToUpdate = repository.getRunByID(id);
+        if (runToUpdate.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Run with id " + id + " does not exist");
+        }
+        return repository.updateRun(runToUpdate.get(), run);
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     void deleteRun(@PathVariable Integer id) {
         Optional<Run> runToDelete = repository.getRunByID(id);
