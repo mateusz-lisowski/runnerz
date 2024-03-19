@@ -24,6 +24,24 @@ public class RunRepository {
                 .findFirst();
     }
 
+    public Run createRun(Run run) {
+        inMemRuns.add(run);
+        return run;
+    }
+
+    public Run updateRun(Run runToUpdate, Run run) {
+        for (int i = 0; i < inMemRuns.size(); i++) {
+            if (Objects.equals(inMemRuns.get(i).id(), runToUpdate.id())) {
+                inMemRuns.set(i, run);
+            }
+        }
+        return run;
+    }
+
+    public void deleteRun(Run run) {
+        inMemRuns.remove(run);
+    }
+
     @PostConstruct
     private void createMockRuns() {
         inMemRuns.add(
