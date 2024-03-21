@@ -41,7 +41,7 @@ public class RunController {
     Run updateRun(@RequestBody Run run, @PathVariable Integer id) {
         Optional<Run> runToUpdate = repository.getRunByID(id);
         if (runToUpdate.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Run with id " + id + " does not exist");
+            throw new RunNotFoundException();
         }
         return repository.updateRun(runToUpdate.get(), run);
     }
@@ -51,7 +51,7 @@ public class RunController {
     void deleteRun(@PathVariable Integer id) {
         Optional<Run> runToDelete = repository.getRunByID(id);
         if (runToDelete.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Run with id " + id + " does not exist");
+            throw new RunNotFoundException();
         }
         repository.deleteRun(runToDelete.get());
     }
